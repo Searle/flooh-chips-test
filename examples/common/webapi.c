@@ -72,6 +72,17 @@ EM_JS(void, webapi_js_event_reset, (), {
     }
 });
 
+bool first_webapi_js_event_tick= true;
+
+EM_JS(void, webapi_js_event_tick, (uint64_t pin, uint32_t tick), {
+    if (Module["webapi_onTick"]) {
+        Module["webapi_onTick"](pin, tick);
+    } else if (Module["first_webapi_js_event_tick"]) {
+        console.log("no Module.webapi_onTick function");
+        Module["first_webapi_js_event_tick"]= false;
+    }
+});
+
 EMSCRIPTEN_KEEPALIVE void webapi_dbg_connect(void) {
     if (state.inited) {
         if (state.funcs.dbg_connect) {
@@ -252,5 +263,11 @@ void webapi_event_reboot(void) {
 void webapi_event_reset(void) {
     #if defined(__EMSCRIPTEN__)
         webapi_js_event_reset();
+    #endif
+}
+
+void webapi_event_tick(uint64_t pin, uint32_t tick) {
+    #if defined(__EMSCRIPTEN__)
+        webapi_js_event_tick(pin, tick);
     #endif
 }

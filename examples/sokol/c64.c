@@ -78,6 +78,7 @@ static void web_dbg_on_stopped(int stop_reason, uint16_t addr);
 static void web_dbg_on_continued(void);
 static void web_dbg_on_reboot(void);
 static void web_dbg_on_reset(void);
+static void web_dbg_on_tick(uint64_t pin, uint32_t tick);
 static webapi_cpu_state_t web_dbg_cpu_state(void);
 static void web_dbg_request_disassemly(uint16_t addr, int offset_lines, int num_lines, webapi_dasm_line_t* result);
 static void web_dbg_read_memory(uint16_t addr, int num_bytes, uint8_t* dst_ptr);
@@ -171,6 +172,7 @@ void app_init(void) {
                 .reset_cb = web_dbg_on_reset,
                 .stopped_cb = web_dbg_on_stopped,
                 .continued_cb = web_dbg_on_continued,
+                .tick_cb = web_dbg_on_tick,
             },
             .snapshot = {
                 .load_cb = ui_load_snapshot,
@@ -539,6 +541,10 @@ static void web_dbg_on_reboot(void) {
 
 static void web_dbg_on_reset(void) {
     webapi_event_reset();
+}
+
+static void web_dbg_on_tick(uint64_t pin, uint32_t tick) {
+    webapi_event_tick(pin, tick);
 }
 
 static webapi_cpu_state_t web_dbg_cpu_state(void) {
