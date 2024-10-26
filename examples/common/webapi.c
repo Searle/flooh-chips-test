@@ -194,6 +194,12 @@ EMSCRIPTEN_KEEPALIVE void webapi_dbg_step_into(void) {
     }
 }
 
+EMSCRIPTEN_KEEPALIVE void webapi_dbg_set_pc(uint16_t pc) {
+    if (state.inited && state.funcs.dbg_set_pc) {
+        state.funcs.dbg_set_pc(pc);
+    }
+}
+
 // return emulator state as JSON-formatted string pointer into WASM heap
 EMSCRIPTEN_KEEPALIVE uint16_t* webapi_dbg_cpu_state(void) {
     static webapi_cpu_state_t res;

@@ -74,6 +74,7 @@ static void web_dbg_break(void);
 static void web_dbg_continue(void);
 static void web_dbg_step_next(void);
 static void web_dbg_step_into(void);
+static void web_dbg_set_pc(uint16_t pc);
 static void web_dbg_on_stopped(int stop_reason, uint16_t addr);
 static void web_dbg_on_continued(void);
 static void web_dbg_on_reboot(void);
@@ -207,6 +208,7 @@ void app_init(void) {
                 .dbg_continue = web_dbg_continue,
                 .dbg_step_next = web_dbg_step_next,
                 .dbg_step_into = web_dbg_step_into,
+                .dbg_set_pc = web_dbg_set_pc,
                 .dbg_cpu_state = web_dbg_cpu_state,
                 .dbg_request_disassembly = web_dbg_request_disassemly,
                 .dbg_read_memory = web_dbg_read_memory,
@@ -513,6 +515,10 @@ static void web_dbg_step_next(void) {
 
 static void web_dbg_step_into(void) {
     ui_dbg_step_into(&state.ui.dbg);
+}
+
+static void web_dbg_set_pc(uint16_t pc) {
+    state.c64.cpu.PC = pc;
 }
 
 static void web_dbg_on_stopped(int stop_reason, uint16_t addr) {
