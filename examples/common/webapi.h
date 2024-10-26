@@ -97,10 +97,16 @@ typedef struct {
     webapi_interface_t funcs;
 } webapi_desc_t;
 
+/* tick info for callback */
+typedef struct {
+    uint32_t pin_flags;
+    uint32_t pin_addr;
+} webapi_event_tick_tick_info_t;
+
 void webapi_init(const webapi_desc_t* desc);
 // stop_reason: WEBAPI_STOPREASON_xxx
 void webapi_event_stopped(int stop_reason, uint16_t addr);
 void webapi_event_continued(void);
 void webapi_event_reboot(void);
 void webapi_event_reset(void);
-void webapi_event_tick(uint64_t pin, uint32_t tick);
+void webapi_event_tick(webapi_event_tick_tick_info_t tick_info);

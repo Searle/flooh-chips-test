@@ -74,9 +74,13 @@ EM_JS(void, webapi_js_event_reset, (), {
 
 bool first_webapi_js_event_tick= true;
 
-EM_JS(void, webapi_js_event_tick, (uint64_t pin, uint32_t tick), {
-    if (Module["webapi_onTick"]) {
-        Module["webapi_onTick"](pin, tick);
+EM_JS(void, webapi_js_event_tick, (webapi_event_tick_tick_info_t tick_info), {
+   if (Module["webapi_onTick"]) {
+        const tickInfoPtr = tick_info >> 2; // Divide by 4 to convert to HEAPU32 index
+        Module["webapi_onTick"]({
+            "pins_flags": Module["HEAPU32"][tickInfoPtr],
+            "pins_addr": Module["HEAPU32"][tickInfoPtr + 1],
+        });
     } else if (Module["first_webapi_js_event_tick"]) {
         console.log("no Module.webapi_onTick function");
         Module["first_webapi_js_event_tick"]= false;
@@ -266,8 +270,8 @@ void webapi_event_reset(void) {
     #endif
 }
 
-void webapi_event_tick(uint64_t pin, uint32_t tick) {
+void webapi_event_tick(webapi_event_tick_tick_info_t tick_info) {
     #if defined(__EMSCRIPTEN__)
-        webapi_js_event_tick(pin, tick);
+        webapi_js_event_tick(tick_info);
     #endif
 }
