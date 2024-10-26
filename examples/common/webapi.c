@@ -232,6 +232,16 @@ EMSCRIPTEN_KEEPALIVE uint8_t* webapi_dbg_read_memory(uint16_t addr, int num_byte
     }
 }
 
+// writes a memory chunk
+EMSCRIPTEN_KEEPALIVE bool webapi_dbg_write_memory(uint16_t addr, int num_bytes, uint8_t* src_ptr) {
+    if (state.inited && state.funcs.dbg_write_memory) {
+        state.funcs.dbg_write_memory(addr, num_bytes, src_ptr);
+        return true;
+    } else {
+        return false;
+    }
+}
+
 EMSCRIPTEN_KEEPALIVE bool webapi_input(char* text) {
     if (state.funcs.input != NULL && text != NULL) {
         state.funcs.input(text);

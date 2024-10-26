@@ -82,6 +82,7 @@ static void web_dbg_on_tick(ui_dbg_tick_info_t tick_info);
 static webapi_cpu_state_t web_dbg_cpu_state(void);
 static void web_dbg_request_disassemly(uint16_t addr, int offset_lines, int num_lines, webapi_dasm_line_t* result);
 static void web_dbg_read_memory(uint16_t addr, int num_bytes, uint8_t* dst_ptr);
+static void web_dbg_write_memory(uint16_t addr, int num_bytes, uint8_t* src_ptr);
 #define BORDER_TOP (24)
 #else
 #define BORDER_TOP (8)
@@ -209,6 +210,7 @@ void app_init(void) {
                 .dbg_cpu_state = web_dbg_cpu_state,
                 .dbg_request_disassembly = web_dbg_request_disassemly,
                 .dbg_read_memory = web_dbg_read_memory,
+                .dbg_write_memory = web_dbg_write_memory,
             }
         });
     #endif
@@ -590,6 +592,10 @@ static void web_dbg_read_memory(uint16_t addr, int num_bytes, uint8_t* dst_ptr) 
     for (int i = 0; i < num_bytes; i++) {
         *dst_ptr++ = mem_rd(&state.c64.mem_cpu, addr++);
     }
+}
+
+static void web_dbg_write_memory(uint16_t addr, int num_bytes, uint8_t* src_ptr) {
+    mem_write_range(&state.c64.mem_cpu, addr, src_ptr, num_bytes);
 }
 #endif
 
