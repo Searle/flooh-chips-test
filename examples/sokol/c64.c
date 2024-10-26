@@ -444,8 +444,10 @@ static void web_boot(void) {
 }
 
 static void web_reset(void) {
-    c64_reset(&state.c64);
-    ui_dbg_reset(&state.ui.dbg);
+    state.c64.cpu.PC = 0x4000;
+
+    // c64_reset(&state.c64);
+    // ui_dbg_reset(&state.ui.dbg);
 }
 
 static void web_dbg_connect(void) {
