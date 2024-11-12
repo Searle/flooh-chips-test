@@ -3,7 +3,8 @@ const path = require('path');
 
 // Paths for input and output directories
 const inputDir = path.join(__dirname, '../fips-deploy/chips-test/wasm-ninja-release');
-const outputDir = path.join(__dirname, '../../../dr-c64emu/public');
+// const outputDir = path.join(__dirname, '../../../dr-c64emu/public');
+const outputDir = path.join(__dirname, '../../../../re6502a/app/public');
 
 // Define file sets
 const files = [
@@ -19,7 +20,7 @@ files.forEach(file => {
     // Modify JavaScript files by wrapping in a function if required
     let modifiedContent;
     if (file.endsWith('.js')) {
-        const jsPrefix = Buffer.from(`window.initDebugC64 = function (Module) {\n`);
+        const jsPrefix = Buffer.from(`window.initC64 = function (Module) {\n`);
         const jsPostfix = Buffer.from(`\n}`);
         modifiedContent = Buffer.concat([jsPrefix, content, jsPostfix]);
     } else {
