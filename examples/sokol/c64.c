@@ -506,7 +506,7 @@ static void web_dbg_break(void) {
 }
 
 static void web_dbg_continue(void) {
-    ui_dbg_continue(&state.ui.dbg, false);
+    ui_dbg_continue(&state.ui.dbg, true);
 }
 
 static void web_dbg_step_next(void) {
